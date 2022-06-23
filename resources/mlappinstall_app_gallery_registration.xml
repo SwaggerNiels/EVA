@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<toolset id="user_apps_toolset" template="false">
+   <tool app_file_path="./" handler_class="com.mathworks.appmanagement.desktop.ToolboxToolSetExtensionHandler" id="bc1fea02-281e-47ca-9bab-3d8632edb887" label="EVA" toolset_id="user_apps_toolset">
+      <callback>matlab.apputil.run('EVA - 1APP')</callback>
+      <summary>This is a beta version of the ExperimentVisualAcoustics. A program used in the Biosonics lab of TU Delft/EWI/Microelectronics/Bioelectronics</summary>
+      <description>This is a beta version of the ExperimentVisualAcoustics. A program used in the Biosonics lab of TU Delft/EWI/Microelectronics/Bioelectronics. It is used for carrying out many measurements, doing signal adaption, and creating visualization. It uses an oscilloscope, a 3d movement stage, and signal generator (optional), which are coordinated to automatically carry out complex measurements over multiple parameters (space, frequency, voltage, burst number). Additional parameters can easily be added if required. For details contact Niels Burghoorn.</description>
+      <parent_tool id="my_apps" toolset_id="apps_toolset"/>
+   </tool>
+</toolset>

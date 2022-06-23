@@ -72,7 +72,7 @@ function result = Measure(ScopeObj,averaging,averaging_count)
 
     %  split the preambleBlock into individual pieces of info
     preambleBlock = regexp(preambleBlock,',','split');
-    disp(preambleBlock)
+%     disp(preambleBlock)
 
     % store all this information into a waveform structure for later use
     waveform.Format = str2double(preambleBlock{1});     % This should be 1, since we're specifying INT16 output

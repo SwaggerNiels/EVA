@@ -1,0 +1,1873 @@
+classdef EVA < matlab.apps.AppBase
+
+    % Properties that correspond to app components
+    properties (Access = public)
+        UIFigure                        matlab.ui.Figure
+        matlabInput                     matlab.ui.control.EditField
+        InputexperimentparametersEditFieldLabel_2  matlab.ui.control.Label
+        RunscriptButton                 matlab.ui.control.Button
+        PlotviewPanel                   matlab.ui.container.Panel
+        ReduceSelectDropDown            matlab.ui.control.DropDown
+        fileButton                      matlab.ui.control.Button
+        plotfileLabel                   matlab.ui.control.EditField
+        normaliseDropDown               matlab.ui.control.DropDown
+        normaliseDropDownLabel          matlab.ui.control.Label
+        ReducedimensionDropDown         matlab.ui.control.DropDown
+        ReducedimensionDropDownLabel    matlab.ui.control.Label
+        ReduceFunctionDropDown          matlab.ui.control.DropDown
+        ReplotButton                    matlab.ui.control.Button
+        FigAxis                         matlab.ui.control.UIAxes
+        SignalsetterPanel               matlab.ui.container.Panel
+        SetsignalButton                 matlab.ui.control.Button
+        OFFButton                       matlab.ui.control.StateButton
+        burstnumberEditField            matlab.ui.control.NumericEditField
+        burstnumberEditFieldLabel       matlab.ui.control.Label
+        VLabel_2                        matlab.ui.control.Label
+        voltageEditField                matlab.ui.control.NumericEditField
+        voltageEditFieldLabel           matlab.ui.control.Label
+        MHzLabel                        matlab.ui.control.Label
+        frequencyEditField              matlab.ui.control.NumericEditField
+        frequencyEditFieldLabel         matlab.ui.control.Label
+        StatusReport                    matlab.ui.control.TextArea
+        StopButton                      matlab.ui.control.StateButton
+        RunButton                       matlab.ui.control.Button
+        ExperimentsettingsPanel         matlab.ui.container.Panel
+        StudyDirButton                  matlab.ui.control.Button
+        StudyFolderLabel                matlab.ui.control.EditField
+        studyfolderEditField            matlab.ui.control.EditField
+        studyfolderEditFieldLabel       matlab.ui.control.Label
+        tagEditField                    matlab.ui.control.EditField
+        tagEditFieldLabel               matlab.ui.control.Label
+        prefixEditField                 matlab.ui.control.EditField
+        prefixEditFieldLabel            matlab.ui.control.Label
+        ExperimentnameLabel             matlab.ui.control.Label
+        ParameterspacePanel             matlab.ui.container.Panel
+        TextArea                        matlab.ui.control.TextArea
+        ExpStringField                  matlab.ui.control.EditField
+        InputexperimentparametersEditFieldLabel  matlab.ui.control.Label
+        ParamButton                     matlab.ui.control.Button
+        ParamAxes                       matlab.ui.control.UIAxes
+        TraceviewPanel                  matlab.ui.container.Panel
+        TDButton                        matlab.ui.control.Button
+        VPButton                        matlab.ui.control.Button
+        measureFileNameEntry            matlab.ui.control.EditField
+        studyfolderEditFieldLabel_2     matlab.ui.control.Label
+        SaveButton                      matlab.ui.control.Button
+        VPaLabel                        matlab.ui.control.Label
+        hydrophonesensitivityEditField  matlab.ui.control.NumericEditField
+        hydrophonesensitivityLabel      matlab.ui.control.Label
+        VPLabel                         matlab.ui.control.Label
+        peaktopeakIntensity             matlab.ui.control.NumericEditField
+        peaktopeakvoltageLabel          matlab.ui.control.Label
+        TDLabel                         matlab.ui.control.Label
+        toPlot                          matlab.ui.control.NumericEditField
+        toEditFieldLabel                matlab.ui.control.Label
+        fromPlot                        matlab.ui.control.NumericEditField
+        fromEditFieldLabel              matlab.ui.control.Label
+        MeasureButton                   matlab.ui.control.Button
+        UIAxes2                         matlab.ui.control.UIAxes
+        TabGroup                        matlab.ui.container.TabGroup
+        AdvancedTab                     matlab.ui.container.Tab
+        GridLayout                      matlab.ui.container.GridLayout
+        animationsmoothingEditField     matlab.ui.control.NumericEditField
+        clippingsensitivityLabel        matlab.ui.control.Label
+        animationsamplingEditField      matlab.ui.control.NumericEditField
+        framesamplingLabel              matlab.ui.control.Label
+        measuringspeedEditField         matlab.ui.control.NumericEditField
+        measuringspeedEditFieldLabel    matlab.ui.control.Label
+        testmodeCheckBox                matlab.ui.control.CheckBox
+        scopevoltagerangeEditField      matlab.ui.control.NumericEditField
+        scopevoltagerangeEditFieldLabel  matlab.ui.control.Label
+        delaysmovemeasureEditField      matlab.ui.control.NumericEditField
+        delaysmovemeasureLabel          matlab.ui.control.Label
+        PeaksplitrebuildCheckBox        matlab.ui.control.CheckBox
+        PeaksplittingCheckBox           matlab.ui.control.CheckBox
+        resurfaceCheckBox               matlab.ui.control.CheckBox
+        AveragingTab                    matlab.ui.container.Tab
+        GridLayout2                     matlab.ui.container.GridLayout
+        manuallimitCheckBox             matlab.ui.control.CheckBox
+        manualupperlimit2DplotEditField  matlab.ui.control.NumericEditField
+        manualupperlimit2DplotEditFieldLabel  matlab.ui.control.Label
+        manuallowerlimit2DplotEditField  matlab.ui.control.NumericEditField
+        manuallowerlimit2DplotEditFieldLabel  matlab.ui.control.Label
+        SignalAveragingCheckBox         matlab.ui.control.CheckBox
+        AveragingCountEditField         matlab.ui.control.NumericEditField
+        AveragingCountEditFieldLabel    matlab.ui.control.Label
+        ManualmovementmoveinmmPanel     matlab.ui.container.Panel
+        manualspeedEditField            matlab.ui.control.NumericEditField
+        movespeedLabel                  matlab.ui.control.Label
+        SetOriginButton                 matlab.ui.control.Button
+        zCurrentField                   matlab.ui.control.NumericEditField
+        yCurrentField                   matlab.ui.control.NumericEditField
+        xCurrentField                   matlab.ui.control.NumericEditField
+        MoveButton_2                    matlab.ui.control.Button
+        zEditField                      matlab.ui.control.NumericEditField
+        zEditFieldLabel                 matlab.ui.control.Label
+        yEditField                      matlab.ui.control.NumericEditField
+        yEditFieldLabel                 matlab.ui.control.Label
+        xEditField                      matlab.ui.control.NumericEditField
+        xEditFieldLabel                 matlab.ui.control.Label
+        moveLabel                       matlab.ui.control.Label
+        currentLabel                    matlab.ui.control.Label
+    end
+
+    
+    properties (Access = private)
+        % Movement settings
+        xmove = 0;
+        ymove = 0;
+        zmove = 0;
+
+        xmove_add = 0;
+        ymove_add = 0;
+        zmove_add = 0;
+
+        % Experiment settings
+        measuring_delay  = 0            ;  %delay between moving and measuring 
+        measuring_speed  = 25           ;  %speed of stage during manual movement
+        movement_speed   = 100          ;  %speed of stage during measurement movement
+
+%         old_data               = ''; %load old data, leave empty when measuring: ''
+% Replaced by plotpath
+        
+        study_name = '';             %name of folder in which to place
+        experiment_name_prefix = '';
+        experiment_name_tag    = '';
+        resurface = 0; %the hydrophone will move up 15[cm] after experiment if '1'
+        
+        correction          = 5     *0.01; %percentage correction on timing window
+        original_distance   = 180; %original distance hydrophone-PZT [mm]
+        
+        frequency           = 9; %frequency of transducer [MHz]
+        burst_number        = 20; %number of cycles
+        voltage             = 10; %voltage applied[V]
+
+        sound_speed = 1480; %m/s in water
+        hydrophone_sensitivity = 1352e-9; %volt/Pa
+        
+        PLOT = 1; % Plot peak-to-peak toggle - 1:on , 0:off
+        ANIM = 0; % Animation of intensity   - 1:on , 0:off
+        PEAK = 0; % Split peaks + animation  - 1:on , 0:off
+        REBUILD = 0; % Redo peak splitting   - 1:on , 0:off
+
+%         period_time         = 1000         *1E-6; %total time [us]
+        vrange              = 200         *1E-3; %size of the yaxis in [mV]
+        plot_interval       = [0, 100]     *1E-6; %time interval for plotting [us]
+%         animation_interval  = [10,  50]     *1E-6; %time interval for animation [us]
+        timeres             = 100                ; %time resolution animation (sampled frame distance)
+        smoothing_value = 20   ; %the clipping/sensitivity multiplier in the simulation intensity 
+        
+        testmode = 0;
+        nosource = 0;
+
+        %trace
+        xtrace = zeros(1,16000);
+        ytrace = zeros(16000,1);
+        xtrace_plot = zeros(16000,1);
+        ytrace_plot = zeros(16000,1);
+        pressureTraceMode = 0;
+        distanceTraceMode = 0;
+
+        %root folder (where the main.m and other functions are found)
+        rootfolder = mfilename('fullpath');
+
+        %study folder
+        datafile_name = '';
+        OUTPATH = strcat(pwd,'/output');
+        path = '';
+        plotpath = '';
+        selected_reference = '';
+        noreferencetext = 'No reference';
+        linedis = 20;
+
+        %param space
+        exp_string;
+        exp_params;
+        exp_ranges;
+
+        parameter_labels;
+        parameter_limits;
+        params;
+        spatialN;
+
+        P1;
+        P2;
+        P3;
+        PL;
+        continuePL_index = 0; %when errored then it can continue from this point
+
+        plottingObj;
+
+        %Averaging of signal
+        averaging = 1;
+        averaging_count = 16;
+
+        %Manual limits
+        enable_manual_limits = 0;
+    end
+    
+    methods (Access = private)
+        
+        function setTimings(app)
+            ax = app.UIAxes2;
+            
+            app.animationsamplingEditField.Value = app.timeres;
+            app.animationsmoothingEditField.Value = app.smoothing_value;
+            
+            if app.distanceTraceMode
+                app.plot_interval(1) = app.fromPlot.Value./app.sound_speed/100;
+                app.plot_interval(2) = app.toPlot.Value./app.sound_speed/100;
+                ax.XLim = [app.fromPlot.Value, app.toPlot.Value]/100;
+            else
+                app.plot_interval(1) = app.fromPlot.Value*1E-6;
+                app.plot_interval(2) = app.toPlot.Value*1E-6;
+                ax.XLim = [app.fromPlot.Value, app.toPlot.Value]*1E-6;
+            end
+
+            if app.pressureTraceMode
+                app.vrange = app.peaktopeakIntensity.Value.*app.hydrophone_sensitivity*1E3;
+                ax.YLim = [-app.peaktopeakIntensity.Value/2 app.peaktopeakIntensity.Value/2].*1E3;
+            else
+                app.vrange = app.peaktopeakIntensity.Value*1E-3;
+                ax.YLim = [-app.peaktopeakIntensity.Value/2 app.peaktopeakIntensity.Value/2].*1E-3;
+            end
+
+            cla(ax);
+            hold(ax,'on');
+            plot(ax,app.xtrace_plot,app.ytrace_plot);
+            hold(ax,'off');
+        end
+        
+        function setMove(app)
+            app.xmove = app.xmove + app.xmove_add;
+            app.ymove = app.ymove + app.ymove_add;
+            app.zmove = app.zmove + app.zmove_add;
+            
+            if ~app.testmode
+%                 return
+                FindXYZcontroller();
+                OpenXYZcontroller();
+    
+                MoveStage(app.xmove_add,app.ymove_add,app.zmove_add,app.movement_speed)
+                disp("done moving")
+                
+                CloseXYZcontroller();
+                if libisloaded('xyz')
+                    unloadlibrary('xyz'); % if dll loaded then unload
+                end
+            end
+
+            app.xEditField.Value = app.xmove_add;
+            app.yEditField.Value = app.ymove_add;
+            app.zEditField.Value = app.zmove_add;
+
+            app.xCurrentField.Value = app.xmove;
+            app.yCurrentField.Value = app.ymove;
+            app.zCurrentField.Value = app.zmove;
+            
+
+%             setGrid(app);
+        end
+        
+        function slicing = checkSlice(app)
+            switch strrep(num2str((app.measuring_volume>0)),' ','')
+                case '110'
+                    slicing = 'XY';
+                case '011'
+                    slicing = 'YZ';
+                case '101'
+                    slicing = 'XZ';
+                case '100'
+                    slicing = 'X';
+                case '010'
+                    slicing = 'Y';
+                case '001'
+                    slicing = 'Z';
+                case '111'
+                    disp('3D measurement volumes are not yet supported');
+                    slicing = 'XYZ';
+                    return;
+                otherwise
+                    disp('Please specify a correct measurement volume.');
+                    slicing = '';
+                    return;
+            end
+
+
+        end
+        
+        function approved = runChecks(app)
+            if app.measuring_speed > 25
+                if ~isequal(questdlg({'You sure you want the stage to move at this high speeds?', ...
+                    'Unadvised at high spatial resolution (small fast movements).'}),'Yes')
+                    approved = 0;
+                    return
+                end
+            end
+
+            if app.continuePL_index ~= 0
+                if ~isequal(questdlg({strcat("You are starting from index ",num2str(app.continuePL_index)), ...
+                    'Are you sure you want to start here?'}),'Yes')
+                    approved = 0;
+                    return
+                end
+            end
+            
+            approved = 1;
+        end
+        
+        function setTestmode(app)
+            if app.testmode
+                app.studyfolderEditField.Value = 'testmode';
+                app.study_name = 'testmode';
+                app.studyfolderEditField.Editable = 'off';
+                
+                app.path = strcat(app.OUTPATH,'/testmode');
+                
+                app.StudyFolderLabel.Value = strcat('...',app.path(end-app.linedis:end));
+            else
+                app.studyfolderEditField.Value = '';
+                app.study_name = '';
+                app.studyfolderEditField.Editable = 'on';
+            end
+        end
+    
+        function valid = CheckExpString(app)
+            badmatches = regexp(app.exp_string, strcat('[^', app.params, 'i\(\):0-9e\-\. ]') , 'match');
+            if ~isempty(badmatches)
+                msgbox(strcat('"', badmatches, '"', ' not allowed in experiment string.'))
+                valid = 0;
+                return
+            end
+            
+            app.exp_params = regexp(app.exp_string, strcat('[', app.params, ']') , 'match');
+            app.exp_params = convertStringsToChars(strjoin(app.exp_params,''));
+
+            if length(app.exp_params) > 3
+                msgbox(strcat('Only 3 parameters allowed in experiment string.'))
+                valid = 0;
+                return
+            end
+
+            spatial_precidence = isempty(regexp(app.exp_params,'[^xyz][xyz]','once'));
+            if ~spatial_precidence
+                msgbox(strcat('Spatial parameters always before non-spatial parameters in experiment string.'))
+                valid = 0;
+                return
+            end
+
+            app.exp_ranges = regexp(app.exp_string, strcat('[', app.params, ']', '\(([^',app.params,'i]*)\)') , 'tokens');
+            app.exp_ranges = convertCharsToStrings(app.exp_ranges);
+            app.exp_ranges = cellfun(@(s) eval(s{1}),app.exp_ranges, UniformOutput=false);
+
+            %Check for the continuePL_index at end of string 'i(<number>)'
+            cPLi = regexp(app.exp_string,'i\(([0-9]*)\)','tokens');
+            if ~isempty(cPLi)
+                app.continuePL_index = str2num( convertCharsToStrings(cPLi{1}) );
+            else
+                app.continuePL_index = 0;
+            end
+
+            for ii = 1:length(app.exp_params)
+                pi = find(app.params == app.exp_params(ii),1);
+                pl(1:2) = app.parameter_limits{pi,2};
+                er(1) = min(app.exp_ranges{ii});
+                er(2) = max(app.exp_ranges{ii});
+            
+                if pl(1) <= er(1) && er(2) <= pl(2) && er(1) < er(2)
+                    continue;
+                else
+                    msgbox(strcat('Please check parameter limits in experiment string.'))
+                    valid = 0;
+                    return
+%                     error(['Parameter out of range! ', ...
+%                         app.exp_params(ii) ' should be in ' ...
+%                         num2str(pl(1)) ' to ' num2str(pl(2))]);
+                end
+            end
+
+            valid = 1;
+            return
+        end
+        
+        function SetParamAxis(app)
+            LABEL_SIZE = 12;
+            NUMBER_SIZE = 50;
+            TICK_NUMBER = 10;
+            f_ticklabel = @(r) reshape([r(1:round(length(r)/TICK_NUMBER)+1:end); ...
+                strings(round(length(r)/TICK_NUMBER), ...
+                length(r(1:round(length(r)/TICK_NUMBER)+1:end)))],1,[]);
+            
+            ax = app.ParamAxes;
+            cla(ax,'reset')
+            switch length(app.exp_params)
+                case 1
+                    er1 = app.exp_ranges{1};
+                    app.P1 = er1;
+                    app.PL = app.P1(:);
+            
+                    xmm = [min(er1) max(er1)];
+                    xlim(ax, xmm);
+            
+                    xticks(ax, er1);
+                    yticks(ax, []);
+                    xticklabels(ax, f_ticklabel(er1))
+            
+                    xl = app.parameter_labels(find(app.exp_params(1) == app.params,1),2);
+                    xlabel(ax, xl,'FontSize',LABEL_SIZE);
+                    ylabel(ax, '')
+            
+                    text(ax, sum(xmm)/2,.5,num2str(length(app.PL)), ...
+                        'HorizontalAlignment','center','FontSize',NUMBER_SIZE);
+                    view(ax);
+                    grid(ax, "on");
+                case 2
+                    er1 = app.exp_ranges{1};
+                    er2 = app.exp_ranges{2};
+                    
+                    [app.P1,app.P2] = meshgrid(er1,er2);
+                    app.P2(:,2:2:end) = flipud(app.P2(:,2:2:end));
+
+                    app.PL = [app.P1(:) app.P2(:)];
+                    
+                    xmm = [min(er1) max(er1)];
+                    ymm = [min(er2) max(er2)];
+                    xlim(ax, xmm);
+                    ylim(ax, ymm);
+            
+                    xticks(ax, er1);
+                    yticks(ax, er2);
+                    xticklabels(ax, f_ticklabel(er1))
+                    yticklabels(ax, f_ticklabel(er2))
+            
+                    xl = app.parameter_labels(find(app.exp_params(1) == app.params,1),2);
+                    yl = app.parameter_labels(find(app.exp_params(2) == app.params,1),2);
+                    xlabel(ax, xl,'FontSize',LABEL_SIZE);
+                    ylabel(ax, yl,'FontSize',LABEL_SIZE);
+            
+                    text(ax, sum(xmm)/2,sum(ymm)/2,num2str(length(app.PL)), ...
+                        'HorizontalAlignment','center','FontSize',NUMBER_SIZE);
+                    view(ax);
+                    grid(ax, "on");
+                case 3
+                    er1 = app.exp_ranges{1};
+                    er2 = app.exp_ranges{2};
+                    er3 = app.exp_ranges{3};
+                    
+                    %Check spatial relation in order for more efficient movement
+%                     app.spatialN = length(regexp(app.exp_params,'[xyz]',"match"));
+                    
+                    [app.P2,app.P3,app.P1] = meshgrid(er2,er3,er1);
+                    app.P2(:,:,2:2:end) = fliplr(app.P2(:,:,2:2:end));
+                    app.P3(:,2:2:end,:) = flipud(app.P3(:,2:2:end,:));
+                    app.P3(:,:,2:2:end) = rot90 (app.P3(:,:,2:2:end),2);
+
+                    app.PL = [app.P1(:) app.P2(:) app.P3(:)];
+            
+                    xmm = [min(er1) max(er1)];
+                    ymm = [min(er2) max(er2)];
+                    zmm = [min(er3) max(er3)];
+                    xlim(ax, xmm);
+                    ylim(ax, ymm);
+                    zlim(ax, zmm);
+            
+                    xticks(ax, er1);
+                    yticks(ax, er2);
+                    zticks(ax, er3);
+                    xticklabels(ax, f_ticklabel(er1))
+                    yticklabels(ax, f_ticklabel(er2))
+                    zticklabels(ax, f_ticklabel(er3))
+            
+                    xl = app.parameter_labels(find(app.exp_params(1) == app.params,1),2);
+                    yl = app.parameter_labels(find(app.exp_params(2) == app.params,1),2);
+                    zl = app.parameter_labels(find(app.exp_params(3) == app.params,1),2);
+                    xlabel(ax, xl,'FontSize',LABEL_SIZE);
+                    ylabel(ax, yl,'FontSize',LABEL_SIZE);
+                    zlabel(ax, zl,'FontSize',LABEL_SIZE);
+            
+                    text(ax, sum(xmm)/2,sum(ymm)/2,sum(zmm)/2,num2str(length(app.PL)), ...
+                        'HorizontalAlignment','center','FontSize',NUMBER_SIZE);
+                    view(ax, 3);
+                    grid(ax, "on");
+            end
+        end
+        
+        function setSignalApp(app)
+            if ~app.nosource
+                GenObj = FindGenerator();
+                InitGenerator(GenObj);
+    
+                freq = app.frequency;
+                burstN = app.burst_number;
+                volt = app.voltage;
+    
+                SetSignal(GenObj,'f',freq,0,0);
+                SetSignal(GenObj,'b',0,burstN,0);
+                SetSignal(GenObj,'v',0,0,volt);
+    
+                app.frequencyEditField.Value = freq;
+                app.burstnumberEditField.Value = burstN;
+                app.voltageEditField.Value = volt;
+    
+                if ~app.OFFButton.Value
+                    CloseGenerator(GenObj);
+                end
+            end
+        end
+        
+        function setTracePlot(app)
+            if app.distanceTraceMode
+                app.xtrace_plot = app.xtrace.*app.sound_speed;
+                app.UIAxes2.XLabel.String = 'US travelled distance [m]';
+                app.TDLabel.Text = '[cm]';
+            else
+                app.xtrace_plot = app.xtrace;
+                app.UIAxes2.XLabel.String = 'time [s]';
+                app.TDLabel.Text = '[us]';
+            end
+
+            if app.pressureTraceMode
+                app.ytrace_plot = app.ytrace./app.hydrophone_sensitivity;
+                app.UIAxes2.YLabel.String = 'pressure [P]';
+                app.VPLabel.Text = '[kPa]';
+            else
+                app.ytrace_plot = app.ytrace;
+                app.UIAxes2.YLabel.String = 'voltage [V]';
+                app.VPLabel.Text = '[mV]';
+            end
+            
+        end
+    end
+    
+
+    % Callbacks that handle component events
+    methods (Access = private)
+
+        % Code that executes after component creation
+        function startupFcn(app)
+            app.rootfolder = app.rootfolder(1:end-4);%filePath = matlab.desktop.editor.getActiveFilename; fprintf('%s\n',filePath);
+            cd(app.rootfolder);
+            clc
+            fprintf('Opened EVA in %s',app.rootfolder);
+            disp(sprintf(['\n', ...
+                '\tThis should be the EVA installation folder with all its function-scripts.\n', ...
+                '\tThis folder should also be inside the matlab search path.\n', ...
+                '\tFunction-scripts are overridden if used in current working directory\n', ...
+                '\t(use "pwd()" to see current working directory)\n', ...
+                '\t(use "path" to see all the folders in the matlab search path)\n']));
+            
+            app.xEditField.Value = app.xmove;
+            app.yEditField.Value = app.ymove;
+            app.zEditField.Value = app.zmove;
+            app.manualspeedEditField.Value = app.movement_speed;
+            
+            app.measuringspeedEditField.Value = app.measuring_speed;
+            app.delaysmovemeasureEditField.Value = app.measuring_delay;
+
+            app.hydrophonesensitivityEditField.Value = app.hydrophone_sensitivity;
+            app.peaktopeakIntensity.Value = app.vrange*1E3;
+            app.fromPlot.Value = app.plot_interval(1)*1E6;
+            app.toPlot.Value = app.plot_interval(2)*1E6;
+
+            app.path = app.OUTPATH;
+
+            app.animationsmoothingEditField.Value = app.smoothing_value;
+            app.animationsamplingEditField.Value = app.timeres;
+
+            startup_diag_done = 0;
+            while (~startup_diag_done)
+                startup_diag_out = questdlg( ...
+                    'Do you want to connect to all devices or start up in testmode?', ...
+                    'Startup EVA', ...
+                    'Connect devices', ...
+                    'All except source', ...
+                    'Run testmode', ...
+                    'Connect devices');
+    
+                if isequal(startup_diag_out,'Run testmode')
+                    app.testmode=1;
+                    startup_diag_done = 1;
+                    
+                    %disable measure and signal setting panel
+                    app.TraceviewPanel.Enable = 'off';
+                    app.SignalsetterPanel.Enable = 'off';
+
+                    %Show testmode example
+                    app.TextArea.Value = [app.TextArea.Value(1:end-1);{'Testmode example: x(1:10) y(1:10) z(1:10)'}];
+
+                elseif isequal(startup_diag_out,'Connect devices')
+                    app.testmode=0;
+                    startup_diag_done = 1;
+                elseif isequal(startup_diag_out,'All except source')
+                    app.testmode=0;
+                    app.nosource=1;
+                    startup_diag_done = 1;
+
+                    %disable signal setting panel
+                    app.SignalsetterPanel.Enable = 'off';
+
+                    %indicate impossible signal setting parameters
+                    app.TextArea.Value(4) = {'^Not possible, since no source'};
+                else
+                    close(app.UIFigure);
+                    return
+                end
+            end
+
+            setMove(app);
+            setTimings(app);
+            setTestmode(app);
+            if ~app.testmode %inside setSignalApp it is checked if source is connected
+                setSignalApp(app);
+            end
+
+            %parameter space
+            app.parameter_labels = {
+                'x', 'X [mm]'
+                'y', 'Y [mm]'
+                'z', 'Z [mm]'
+                'f', 'Frequency [MHz]'
+                'b', 'Burst number'
+                'v', 'Voltage [V]'
+%                 'q', 'Form'
+            };
+            
+            app.parameter_limits = {
+                'x', [0,100] %in [mm]
+                'y', [0,100] %in [mm]
+                'z', [0,100] %in [mm]
+                'f', [.01,50] %in [MHz]
+                'b', [0,1000] %in [# of bursts]
+                'v', [0,1000] %in [V]
+            };
+            
+            app.params = strjoin(app.parameter_labels(:,1),'');
+
+            app.StatusReport.FontSize = 15;
+            app.StatusReport.Value = ["Welcome to", "Experiment Visual Acoustics"];
+
+            app.plottingObj.params = app.params;
+            app.plottingObj.parameter_labels = app.parameter_labels;
+            app.plottingObj.normalise = 'no';
+            app.plottingObj.reduced_dimension = 'no';
+            app.plottingObj.reduce_method = 'mean';
+        end
+
+        % Button pushed function: MoveButton_2
+        function MoveButton_Pushed(app, event)
+            setMove(app);
+        end
+
+        % Button pushed function: SetOriginButton
+        function SetOriginButtonPushed(app, event)
+            app.xmove = 0;
+            app.ymove = 0;
+            app.zmove = 0;
+
+            app.xmove_add = 0;
+            app.ymove_add = 0;
+            app.zmove_add = 0;
+
+            setMove(app);
+        end
+
+        % Value changed function: xEditField
+        function xEditFieldValueChanged(app, event)
+            value = app.xEditField.Value;
+            app.xmove_add = value;
+        end
+
+        % Value changed function: yEditField
+        function yEditFieldValueChanged(app, event)
+            value = app.yEditField.Value;
+            app.ymove_add = value;
+        end
+
+        % Value changed function: zEditField
+        function zEditFieldValueChanged(app, event)
+            value = app.zEditField.Value;
+            app.zmove_add = value;
+        end
+
+        % Value changed function: fromPlot
+        function fromPlotValueChanged(app, event)
+            if app.fromPlot.Value > app.toPlot.Value
+                app.fromPlot.Value = round(app.toPlot.Value-1);
+                msgbox('Please do not do this Ghandi... time/distance cannot be negative!')
+            end
+            setTracePlot(app);
+            setTimings(app);
+        end
+
+        % Value changed function: toPlot
+        function toPlotValueChanged(app, event)
+            if app.toPlot.Value < app.fromPlot.Value
+                app.toPlot.Value = round(app.fromPlot+1);
+                msgbox('Please do not do this Ghandi... time/distance cannot be negative!')
+            end
+            setTracePlot(app);
+            setTimings(app);
+        end
+
+        % Value changed function: animationsamplingEditField
+        function animationsamplingEditFieldValueChanged(app, event)
+            value = app.animationsamplingEditField.Value;
+            app.timeres = value;
+            setTimings(app);
+        end
+
+        % Value changed function: animationsmoothingEditField
+        function animationsmoothingEditFieldValueChanged(app, event)
+            value = app.animationsmoothingEditField.Value;
+            app.smoothing_value = value;
+            setTimings(app);
+        end
+
+        % Value changed function: hydrophonesensitivityEditField
+        function hydrophonesensitivityEditFieldValueChanged(app, event)
+            value = app.hydrophonesensitivityEditField.Value;
+            app.hydrophone_sensitivity = value;
+        end
+
+        % Value changed function: resurfaceCheckBox
+        function resurfaceCheckBoxValueChanged(app, event)
+            value = app.resurfaceCheckBox.Value;
+            app.resurface = value;
+        end
+
+        % Button pushed function: StudyDirButton
+        function StudyDirButtonPushed(app, event)
+            setpath=uigetdir(app.OUTPATH);                    % Calls 'uigetdir' to obtain the directory location from the user
+            app.UIFigure.Visible = 'off';     % Toggles figure visible.  These two lines of code work-around an issue whether the figure is sent to the background.
+            app.UIFigure.Visible = 'on';      
+            
+            if ~isequal(setpath,0)
+                app.path = setpath;
+                app.StudyFolderLabel.Value = strcat('...',app.path(end-app.linedis:end));
+                folder = strsplit(setpath,'\');
+                app.studyfolderEditField.Value = folder{end};
+            end
+        end
+
+        % Button pushed function: RunButton
+        function RunButtonPushed(app, event)
+            if ~runChecks(app)
+                disp('Checks are not met, do not run.')
+                return
+            end
+
+            %make sure the main from within the app.rootfolder is used
+            set_signal = {app.frequency, app.voltage, app.burst_number};
+            set_scope = {app.hydrophone_sensitivity, app.vrange, app.plot_interval, app.averaging, app.averaging_count};
+
+            if app.enable_manual_limits
+                app.plottingObj.manual_limits = [
+                    app.manuallowerlimit2DplotEditField.Value
+                    app.manualupperlimit2DplotEditField.Value];
+            else
+                app.plottingObj.manual_limits = 0;
+            end
+
+            app.datafile_name = main(...
+                app.PL, ...
+                app.exp_params, ...
+                app.exp_ranges, ...
+                app.plottingObj, ...
+                app.measuring_speed, ...
+                app.measuring_delay, ...
+                app.path, ...
+                '', ... %always leave old data empty when pressing Run
+                app.study_name, ...
+                app.experiment_name_prefix, ...
+                app.experiment_name_tag, ...
+                app.resurface, ...
+                app.FigAxis, ...
+                app.exp_string, ...
+                set_signal, ...
+                set_scope, ...
+                app.timeres, ...
+                app.smoothing_value, ...
+                app.testmode, ...
+                app.nosource, ...
+                app.StopButton, ...
+                app.StatusReport, ...
+                app.continuePL_index);
+
+            app.plotpath = app.datafile_name;
+            app.plotfileLabel.Value = app.datafile_name;
+            
+            app.OFFButton.Value = false;
+            app.OFFButton.Text = 'OFF';
+            app.OFFButton.BackgroundColor = [0.96,0.96,0.96];
+        end
+
+        % Value changed function: testmodeCheckBox
+        function testmodeCheckBoxValueChanged(app, event)
+            value = app.testmodeCheckBox.Value;
+            app.testmode = value;
+
+            setTestmode(app);
+        end
+
+        % Value changed function: delaysmovemeasureEditField
+        function delaysmovemeasureEditFieldValueChanged(app, event)
+            value = app.delaysmovemeasureEditField.Value;
+            app.measuring_delay = value;
+        end
+
+        % Value changed function: manualspeedEditField
+        function manualspeedEditFieldValueChanged(app, event)
+            value = app.manualspeedEditField.Value;
+            app.movement_speed = value;
+        end
+
+        % Value changed function: measuringspeedEditField
+        function measuringspeedEditFieldValueChanged(app, event)
+            value = app.measuringspeedEditField.Value;
+            app.measuring_speed = value;
+        end
+
+        % Value changed function: peaktopeakIntensity
+        function peaktopeakIntensityValueChanged(app, event)
+            setTracePlot(app);
+            setTimings(app);
+        end
+
+        % Value changed function: StopButton
+        function StopButtonValueChanged(app, event)
+%             value = app.StopButton.Value;
+        end
+
+        % Button pushed function: MeasureButton
+        function MeasureButtonPushed(app, event)
+            % Will automatically plot traces in "app.UIAxes2" 
+            % via "setTimings" function
+            
+            if ~app.testmode
+                ScopeObj = FindOscilloscope();
+                
+                setTimings(app);
+
+                range = app.plot_interval(2) - app.plot_interval(1);
+                delay = (app.plot_interval(2) + app.plot_interval(1))/2;
+                app.vrange
+
+                InitOscilloscope(ScopeObj, range, delay, app.vrange);
+                
+                result = Measure(ScopeObj,app.averaging,app.averaging_count);
+                
+                app.xtrace = result.XData;
+                app.ytrace = result.YData;
+                setTracePlot(app);
+
+                delete(ScopeObj); clear ScopeObj;
+            else
+                tend = 160;
+                ti = 50;
+                tf = 60;
+                
+                xx = (0:tend)./tend./1000;
+                yy = zeros(length(xx),1);
+                
+                yy(ti:tf) = sin( 2*pi.*xx(1:tf-ti+1) ./ xx(tf-ti+1) )*100E-3;
+
+                app.xtrace = xx;
+                app.ytrace = yy;
+            end
+
+            setTimings(app);
+        end
+
+        % Button pushed function: ParamButton
+        function ParamButtonPushed(app, event)
+            value = app.ExpStringField.Value;
+            
+            app.exp_string = value;
+            valid = app.CheckExpString();
+
+            if valid
+                app.ExpStringField.FontColor = [.1,.6,.1];
+                app.SetParamAxis();
+            else
+                app.ExpStringField.FontColor = 'red';
+            end
+        end
+
+        % Value changed function: ReducedimensionDropDown
+        function ReducedimensionDropDownValueChanged(app, event)
+            value = app.ReducedimensionDropDown.Value;
+            if ~isequal(value,'no')
+                app.ReduceFunctionDropDown.Visible = 1;
+                app.ReduceFunctionDropDown.BackgroundColor = [1.00,0.41,0.16];
+                app.ReducedimensionDropDown.BackgroundColor = [1.00,0.41,0.16];
+                app.plottingObj.reduced_dimension = value;
+                
+                value = app.ReduceFunctionDropDown.Value;
+                app.plottingObj.reduce_method = value;
+                if isequal(value,"select")
+                    range = app.exp_ranges{str2num(app.plottingObj.reduced_dimension)};
+    
+                    app.ReduceSelectDropDown.Visible = 1;
+                    app.ReduceSelectDropDown.Items = arrayfun(@num2str, ...
+                        range, ...
+                        'UniformOutput',false);
+                    app.ReduceSelectDropDown.ItemsData = 1:length(range);
+                    app.ReduceSelectDropDown.Value = 1;
+                    app.plottingObj.reduce_method = strcat("select_1");
+                else
+                    app.ReduceSelectDropDown.Visible = 0;
+                end
+            else
+                app.plottingObj.reduced_dimension = value;
+                app.ReduceFunctionDropDown.Visible = 0;
+                app.ReduceSelectDropDown.Visible = 0;
+                app.ReduceFunctionDropDown.BackgroundColor = [0.96,0.96,0.96];
+                app.ReducedimensionDropDown.BackgroundColor = [0.96,0.96,0.96];
+            end
+        end
+
+        % Value changed function: ReduceFunctionDropDown
+        function ReduceFunctionDropDownValueChanged(app, event)
+            value = app.ReduceFunctionDropDown.Value;
+            app.plottingObj.reduce_method = value;
+            if isequal(value,"select")
+                range = app.exp_ranges{str2num(app.plottingObj.reduced_dimension)};
+
+                app.ReduceSelectDropDown.Visible = 1;
+                app.ReduceSelectDropDown.Items = arrayfun(@num2str, ...
+                    range, ...
+                    'UniformOutput',false);
+                app.ReduceSelectDropDown.ItemsData = 1:length(range);
+                app.ReduceSelectDropDown.Value = 1;
+                app.plottingObj.reduce_method = strcat("select_1");
+            else
+                app.ReduceSelectDropDown.Visible = 0;
+            end
+        end
+
+        % Value changed function: ReduceSelectDropDown
+        function ReduceSelectDropDownValueChanged(app, event)
+            value = app.ReduceSelectDropDown.Value;
+            app.plottingObj.reduce_method = strcat("select_",num2str(value));
+        end
+
+        % Value changed function: normaliseDropDown
+        function normaliseDropDownValueChanged(app, event)
+            value = app.normaliseDropDown.Value;
+            if ~isequal(value,'no')
+                app.normaliseDropDown.BackgroundColor = [1.00,0.41,0.16];
+            else
+                app.normaliseDropDown.BackgroundColor = [0.96,0.96,0.96];
+            end
+            app.plottingObj.normalise = value;
+        end
+
+        % Button pushed function: SetsignalButton
+        function SetsignalButtonPushed(app, event)
+            app.setSignalApp();
+        end
+
+        % Value changed function: frequencyEditField
+        function frequencyEditFieldValueChanged(app, event)
+            value = app.frequencyEditField.Value;
+            app.frequency = value;
+        end
+
+        % Value changed function: burstnumberEditField
+        function burstnumberEditFieldValueChanged(app, event)
+            value = app.burstnumberEditField.Value;
+            app.burst_number = value;
+        end
+
+        % Value changed function: voltageEditField
+        function voltageEditFieldValueChanged(app, event)
+            value = app.voltageEditField.Value;
+            app.voltage = value;
+        end
+
+        % Value changed function: OFFButton
+        function OFFButtonValueChanged(app, event)
+            value = app.OFFButton.Value;
+            try
+                GenObj = FindGenerator();
+                dg = @(command) fprintf(GenObj, command);
+                
+                fopen(GenObj);
+                if value
+                    dg(':OUTP1 ON');
+                    dg(':OUTP2 ON');
+                    dg(':SOUR1:PHAS:INIT');
+                    dg(':SOUR2:PHAS:SYNC');
+                    
+                    app.OFFButton.Text = 'ON';
+                    app.OFFButton.BackgroundColor = [1.00,0.41,0.16];
+                else
+                    dg(':OUTP1 OFF');
+                    dg(':OUTP2 OFF');
+
+                    app.OFFButton.Text = 'OFF';
+                    app.OFFButton.BackgroundColor = [0.96,0.96,0.96];
+                end
+                fclose(GenObj);
+            catch
+                fclose(GenObj);
+                delete(GenObj);
+                clear GenObj;
+            end
+        end
+
+        % Button pushed function: fileButton
+        function fileButtonPushed(app, event)
+            [setfile, folder] = uigetfile(app.OUTPATH);
+            setpath = strcat(folder, setfile);
+            app.UIFigure.Visible = 'off';     % Toggles figure visible.  These two lines of code work-around an issue whether the figure is sent to the background.
+            app.UIFigure.Visible = 'on';      
+            
+            if ~isequal(setpath,0) && ~isequal(setfile,0)
+                app.plotpath = setpath;
+                app.plotfileLabel.Value = setfile;
+            end
+
+            if ~isempty(app.plotpath)
+                load(app.plotpath,'exp_params','exp_ranges');
+
+                if exist('exp_params', 'var') && exist('exp_ranges', 'var')
+                    app.exp_params = exp_params;
+                    app.exp_ranges = exp_ranges;
+                else
+                    msgbox('This file has no exp_params and exp_ranges. Cannot make to grid.')
+                end
+             else
+                app.StatusReport.Value = 'No file selected to plot';
+                app.StatusReport.FontColor = 'red';
+             end
+        end
+
+        % Button pushed function: ReplotButton
+        function ReplotButtonPushed(app, event)
+            app.StatusReport.Value = 'Reloading plot data';
+            app.StatusReport.FontColor = 'blue';
+            pause(.1);
+            
+            if ~isempty(app.plotpath)
+                file = app.plotpath;
+            else
+                file = app.datafile_name;
+            end
+
+            set_signal = {app.frequency, app.voltage, app.burst_number};
+            set_scope = {app.hydrophone_sensitivity, app.vrange, app.plot_interval, app.averaging, app.averaging_count};
+
+            if app.enable_manual_limits
+                app.plottingObj.manual_limits = [
+                    app.manuallowerlimit2DplotEditField.Value
+                    app.manualupperlimit2DplotEditField.Value];
+            else
+                app.plottingObj.manual_limits = 0;
+            end
+
+            app.datafile_name = main( ...
+                app.PL, ...
+                app.exp_params, ...
+                app.exp_ranges, ...
+                app.plottingObj, ...
+                app.measuring_speed, ...
+                app.measuring_delay, ...
+                app.path, ...
+                file, ...
+                app.study_name, ...
+                app.experiment_name_prefix, ...
+                app.experiment_name_tag, ...
+                app.resurface, ...
+                app.FigAxis, ...
+                app.exp_string, ...
+                set_signal, ...
+                set_scope, ...
+                app.timeres, ...
+                app.smoothing_value, ...
+                app.testmode, ...
+                app.nosource, ...
+                app.StopButton, ...
+                app.StatusReport, ...
+                0);
+        end
+
+        % Value changed function: studyfolderEditField
+        function studyfolderEditFieldValueChanged(app, event)
+            value = app.studyfolderEditField.Value;
+            app.study_name = value;
+
+            app.path = strcat(app.OUTPATH,'/',value);
+            app.folderLabel.Value = strcat('...',app.path(end-app.linedis:end));
+        end
+
+        % Value changed function: tagEditField
+        function tagEditFieldValueChanged(app, event)
+            value = app.tagEditField.Value;
+            app.experiment_name_tag = value;
+        end
+
+        % Value changed function: prefixEditField
+        function prefixEditFieldValueChanged(app, event)
+            value = app.prefixEditField.Value;
+            app.experiment_name_prefix = value;
+        end
+
+        % Value changed function: SignalAveragingCheckBox
+        function SignalAveragingCheckBoxValueChanged(app, event)
+            value = app.SignalAveragingCheckBox.Value;
+            app.averaging = value;
+        end
+
+        % Value changed function: AveragingCountEditField
+        function AveragingCountEditFieldValueChanged(app, event)
+            value = app.AveragingCountEditField.Value;
+            app.averaging_count = value;
+        end
+
+        % Value changed function: manuallimitCheckBox
+        function manuallimitCheckBoxValueChanged(app, event)
+            value = app.manuallimitCheckBox.Value;
+            app.enable_manual_limits = value;
+        end
+
+        % Button pushed function: SaveButton
+        function SaveButtonPushed(app, event)
+            filepath = [app.path '/' app.measureFileNameEntry.Value '.mat'];
+            disp(['Saved trace to:\n' filepath]);
+            xx = app.xtrace;
+            yy = app.ytrace;
+            save(filepath,'xx','yy')
+        end
+
+        % Button pushed function: RunscriptButton
+        function RunscriptButtonPushed(app, event)
+            command = app.matlabInput.Value;
+            eval(command);
+        end
+
+        % Button pushed function: VPButton
+        function VPButtonPushed(app, event)
+            app.pressureTraceMode = ~app.pressureTraceMode;
+
+            %change input box values from mV <> kPa
+            if app.pressureTraceMode 
+                app.peaktopeakIntensity.Value = round(app.peaktopeakIntensity.Value/app.hydrophone_sensitivity*1E-6);
+            else
+                app.peaktopeakIntensity.Value = round(app.peaktopeakIntensity.Value*app.hydrophone_sensitivity*1E6);
+            end
+
+            setTracePlot(app);
+            setTimings(app);
+        end
+
+        % Button pushed function: TDButton
+        function TDButtonPushed(app, event)
+            app.distanceTraceMode = ~app.distanceTraceMode;
+            
+            %change input box values from cm <> us
+            if app.distanceTraceMode 
+                app.fromPlot.Value = round(app.fromPlot.Value.*app.sound_speed*100/1000000);
+                app.toPlot.Value = round(app.toPlot.Value.*app.sound_speed*100/1000000);
+            else
+                app.fromPlot.Value = round(app.fromPlot.Value./app.sound_speed/100*1000000);
+                app.toPlot.Value = round(app.toPlot.Value./app.sound_speed/100*1000000);
+            end
+
+            setTracePlot(app);
+            setTimings(app);
+        end
+    end
+
+    % Component initialization
+    methods (Access = private)
+
+        % Create UIFigure and components
+        function createComponents(app)
+
+            % Create UIFigure and hide until all components are created
+            app.UIFigure = uifigure('Visible', 'off');
+            app.UIFigure.Position = [100 100 1250 727];
+            app.UIFigure.Name = 'MATLAB App';
+
+            % Create ManualmovementmoveinmmPanel
+            app.ManualmovementmoveinmmPanel = uipanel(app.UIFigure);
+            app.ManualmovementmoveinmmPanel.Title = 'Manual movement - move in [mm]';
+            app.ManualmovementmoveinmmPanel.BackgroundColor = [1 0.7373 0.5098];
+            app.ManualmovementmoveinmmPanel.Position = [17 443 191 273];
+
+            % Create currentLabel
+            app.currentLabel = uilabel(app.ManualmovementmoveinmmPanel);
+            app.currentLabel.Position = [54 218 46 22];
+            app.currentLabel.Text = 'current';
+
+            % Create moveLabel
+            app.moveLabel = uilabel(app.ManualmovementmoveinmmPanel);
+            app.moveLabel.Position = [118 218 46 22];
+            app.moveLabel.Text = 'move';
+
+            % Create xEditFieldLabel
+            app.xEditFieldLabel = uilabel(app.ManualmovementmoveinmmPanel);
+            app.xEditFieldLabel.HorizontalAlignment = 'right';
+            app.xEditFieldLabel.Position = [15 179 25 22];
+            app.xEditFieldLabel.Text = 'x';
+
+            % Create xEditField
+            app.xEditField = uieditfield(app.ManualmovementmoveinmmPanel, 'numeric');
+            app.xEditField.ValueChangedFcn = createCallbackFcn(app, @xEditFieldValueChanged, true);
+            app.xEditField.Position = [112 179 57 22];
+
+            % Create yEditFieldLabel
+            app.yEditFieldLabel = uilabel(app.ManualmovementmoveinmmPanel);
+            app.yEditFieldLabel.HorizontalAlignment = 'right';
+            app.yEditFieldLabel.Position = [15 145 25 22];
+            app.yEditFieldLabel.Text = 'y';
+
+            % Create yEditField
+            app.yEditField = uieditfield(app.ManualmovementmoveinmmPanel, 'numeric');
+            app.yEditField.ValueChangedFcn = createCallbackFcn(app, @yEditFieldValueChanged, true);
+            app.yEditField.Position = [112 145 57 22];
+
+            % Create zEditFieldLabel
+            app.zEditFieldLabel = uilabel(app.ManualmovementmoveinmmPanel);
+            app.zEditFieldLabel.HorizontalAlignment = 'right';
+            app.zEditFieldLabel.Position = [16 108 25 22];
+            app.zEditFieldLabel.Text = 'z';
+
+            % Create zEditField
+            app.zEditField = uieditfield(app.ManualmovementmoveinmmPanel, 'numeric');
+            app.zEditField.ValueChangedFcn = createCallbackFcn(app, @zEditFieldValueChanged, true);
+            app.zEditField.Position = [112 108 57 22];
+
+            % Create MoveButton_2
+            app.MoveButton_2 = uibutton(app.ManualmovementmoveinmmPanel, 'push');
+            app.MoveButton_2.ButtonPushedFcn = createCallbackFcn(app, @MoveButton_Pushed, true);
+            app.MoveButton_2.Position = [72 13 108 42];
+            app.MoveButton_2.Text = 'Move';
+
+            % Create xCurrentField
+            app.xCurrentField = uieditfield(app.ManualmovementmoveinmmPanel, 'numeric');
+            app.xCurrentField.Editable = 'off';
+            app.xCurrentField.Position = [49 179 57 22];
+
+            % Create yCurrentField
+            app.yCurrentField = uieditfield(app.ManualmovementmoveinmmPanel, 'numeric');
+            app.yCurrentField.Editable = 'off';
+            app.yCurrentField.Position = [49 145 57 22];
+
+            % Create zCurrentField
+            app.zCurrentField = uieditfield(app.ManualmovementmoveinmmPanel, 'numeric');
+            app.zCurrentField.Editable = 'off';
+            app.zCurrentField.Position = [50 108 57 22];
+
+            % Create SetOriginButton
+            app.SetOriginButton = uibutton(app.ManualmovementmoveinmmPanel, 'push');
+            app.SetOriginButton.ButtonPushedFcn = createCallbackFcn(app, @SetOriginButtonPushed, true);
+            app.SetOriginButton.Position = [20 13 45 42];
+            app.SetOriginButton.Text = {'Set'; 'Origin'};
+
+            % Create movespeedLabel
+            app.movespeedLabel = uilabel(app.ManualmovementmoveinmmPanel);
+            app.movespeedLabel.HorizontalAlignment = 'right';
+            app.movespeedLabel.Position = [21 67 106 23];
+            app.movespeedLabel.Text = 'manual speed [%]';
+
+            % Create manualspeedEditField
+            app.manualspeedEditField = uieditfield(app.ManualmovementmoveinmmPanel, 'numeric');
+            app.manualspeedEditField.ValueChangedFcn = createCallbackFcn(app, @manualspeedEditFieldValueChanged, true);
+            app.manualspeedEditField.Position = [137 69 32 19];
+            app.manualspeedEditField.Value = 25;
+
+            % Create TabGroup
+            app.TabGroup = uitabgroup(app.UIFigure);
+            app.TabGroup.Position = [17 6 191 431];
+
+            % Create AdvancedTab
+            app.AdvancedTab = uitab(app.TabGroup);
+            app.AdvancedTab.Title = 'Advanced';
+
+            % Create GridLayout
+            app.GridLayout = uigridlayout(app.AdvancedTab);
+            app.GridLayout.ColumnWidth = {'1x', 60};
+            app.GridLayout.RowHeight = {'1x', '1x', '1x', '1x', '1x', '1x', '1x', '1x', '1x'};
+
+            % Create resurfaceCheckBox
+            app.resurfaceCheckBox = uicheckbox(app.GridLayout);
+            app.resurfaceCheckBox.ValueChangedFcn = createCallbackFcn(app, @resurfaceCheckBoxValueChanged, true);
+            app.resurfaceCheckBox.Text = 'resurface';
+            app.resurfaceCheckBox.Layout.Row = 1;
+            app.resurfaceCheckBox.Layout.Column = 1;
+
+            % Create PeaksplittingCheckBox
+            app.PeaksplittingCheckBox = uicheckbox(app.GridLayout);
+            app.PeaksplittingCheckBox.Visible = 'off';
+            app.PeaksplittingCheckBox.Text = {'Peak '; 'splitting'};
+            app.PeaksplittingCheckBox.Layout.Row = 9;
+            app.PeaksplittingCheckBox.Layout.Column = 1;
+
+            % Create PeaksplitrebuildCheckBox
+            app.PeaksplitrebuildCheckBox = uicheckbox(app.GridLayout);
+            app.PeaksplitrebuildCheckBox.Visible = 'off';
+            app.PeaksplitrebuildCheckBox.Text = {'Peak split'; 'rebuild'};
+            app.PeaksplitrebuildCheckBox.Layout.Row = 8;
+            app.PeaksplitrebuildCheckBox.Layout.Column = 1;
+
+            % Create delaysmovemeasureLabel
+            app.delaysmovemeasureLabel = uilabel(app.GridLayout);
+            app.delaysmovemeasureLabel.HorizontalAlignment = 'right';
+            app.delaysmovemeasureLabel.Layout.Row = 4;
+            app.delaysmovemeasureLabel.Layout.Column = 1;
+            app.delaysmovemeasureLabel.Text = {'delay [s]'; 'move-measure'};
+
+            % Create delaysmovemeasureEditField
+            app.delaysmovemeasureEditField = uieditfield(app.GridLayout, 'numeric');
+            app.delaysmovemeasureEditField.ValueChangedFcn = createCallbackFcn(app, @delaysmovemeasureEditFieldValueChanged, true);
+            app.delaysmovemeasureEditField.Layout.Row = 4;
+            app.delaysmovemeasureEditField.Layout.Column = 2;
+
+            % Create scopevoltagerangeEditFieldLabel
+            app.scopevoltagerangeEditFieldLabel = uilabel(app.GridLayout);
+            app.scopevoltagerangeEditFieldLabel.HorizontalAlignment = 'right';
+            app.scopevoltagerangeEditFieldLabel.Visible = 'off';
+            app.scopevoltagerangeEditFieldLabel.Layout.Row = 3;
+            app.scopevoltagerangeEditFieldLabel.Layout.Column = 1;
+            app.scopevoltagerangeEditFieldLabel.Text = {'scope voltage'; 'range'};
+
+            % Create scopevoltagerangeEditField
+            app.scopevoltagerangeEditField = uieditfield(app.GridLayout, 'numeric');
+            app.scopevoltagerangeEditField.Visible = 'off';
+            app.scopevoltagerangeEditField.Layout.Row = 3;
+            app.scopevoltagerangeEditField.Layout.Column = 2;
+
+            % Create testmodeCheckBox
+            app.testmodeCheckBox = uicheckbox(app.GridLayout);
+            app.testmodeCheckBox.ValueChangedFcn = createCallbackFcn(app, @testmodeCheckBoxValueChanged, true);
+            app.testmodeCheckBox.Text = 'testmode';
+            app.testmodeCheckBox.Layout.Row = 2;
+            app.testmodeCheckBox.Layout.Column = 1;
+
+            % Create measuringspeedEditFieldLabel
+            app.measuringspeedEditFieldLabel = uilabel(app.GridLayout);
+            app.measuringspeedEditFieldLabel.HorizontalAlignment = 'right';
+            app.measuringspeedEditFieldLabel.Layout.Row = 5;
+            app.measuringspeedEditFieldLabel.Layout.Column = 1;
+            app.measuringspeedEditFieldLabel.Text = {'measuring'; 'speed [%]'};
+
+            % Create measuringspeedEditField
+            app.measuringspeedEditField = uieditfield(app.GridLayout, 'numeric');
+            app.measuringspeedEditField.ValueChangedFcn = createCallbackFcn(app, @measuringspeedEditFieldValueChanged, true);
+            app.measuringspeedEditField.Layout.Row = 5;
+            app.measuringspeedEditField.Layout.Column = 2;
+
+            % Create framesamplingLabel
+            app.framesamplingLabel = uilabel(app.GridLayout);
+            app.framesamplingLabel.HorizontalAlignment = 'right';
+            app.framesamplingLabel.Tooltip = {'The distance in measurement data between samples taken in time. High value = low temporal resolution.'};
+            app.framesamplingLabel.Layout.Row = 6;
+            app.framesamplingLabel.Layout.Column = 1;
+            app.framesamplingLabel.Text = {'animation'; 'sampling'};
+
+            % Create animationsamplingEditField
+            app.animationsamplingEditField = uieditfield(app.GridLayout, 'numeric');
+            app.animationsamplingEditField.ValueChangedFcn = createCallbackFcn(app, @animationsamplingEditFieldValueChanged, true);
+            app.animationsamplingEditField.Tooltip = {'The distance in measurement data between samples taken in time. High value = low temporal resolution.'};
+            app.animationsamplingEditField.Layout.Row = 6;
+            app.animationsamplingEditField.Layout.Column = 2;
+
+            % Create clippingsensitivityLabel
+            app.clippingsensitivityLabel = uilabel(app.GridLayout);
+            app.clippingsensitivityLabel.HorizontalAlignment = 'right';
+            app.clippingsensitivityLabel.Layout.Row = 7;
+            app.clippingsensitivityLabel.Layout.Column = 1;
+            app.clippingsensitivityLabel.Text = {'animation'; 'smoothing'};
+
+            % Create animationsmoothingEditField
+            app.animationsmoothingEditField = uieditfield(app.GridLayout, 'numeric');
+            app.animationsmoothingEditField.ValueChangedFcn = createCallbackFcn(app, @animationsmoothingEditFieldValueChanged, true);
+            app.animationsmoothingEditField.Layout.Row = 7;
+            app.animationsmoothingEditField.Layout.Column = 2;
+
+            % Create AveragingTab
+            app.AveragingTab = uitab(app.TabGroup);
+            app.AveragingTab.Title = 'Averaging';
+
+            % Create GridLayout2
+            app.GridLayout2 = uigridlayout(app.AveragingTab);
+            app.GridLayout2.RowHeight = {'1x', '1x', '1x', '1x', '1x', '1x', '1x'};
+
+            % Create AveragingCountEditFieldLabel
+            app.AveragingCountEditFieldLabel = uilabel(app.GridLayout2);
+            app.AveragingCountEditFieldLabel.HorizontalAlignment = 'right';
+            app.AveragingCountEditFieldLabel.Layout.Row = 2;
+            app.AveragingCountEditFieldLabel.Layout.Column = 1;
+            app.AveragingCountEditFieldLabel.Text = {'Averaging'; 'Count'};
+
+            % Create AveragingCountEditField
+            app.AveragingCountEditField = uieditfield(app.GridLayout2, 'numeric');
+            app.AveragingCountEditField.ValueChangedFcn = createCallbackFcn(app, @AveragingCountEditFieldValueChanged, true);
+            app.AveragingCountEditField.Layout.Row = 2;
+            app.AveragingCountEditField.Layout.Column = 2;
+            app.AveragingCountEditField.Value = 16;
+
+            % Create SignalAveragingCheckBox
+            app.SignalAveragingCheckBox = uicheckbox(app.GridLayout2);
+            app.SignalAveragingCheckBox.ValueChangedFcn = createCallbackFcn(app, @SignalAveragingCheckBoxValueChanged, true);
+            app.SignalAveragingCheckBox.Text = {'Signal'; 'Averaging'};
+            app.SignalAveragingCheckBox.Layout.Row = 1;
+            app.SignalAveragingCheckBox.Layout.Column = 2;
+            app.SignalAveragingCheckBox.Value = true;
+
+            % Create manuallowerlimit2DplotEditFieldLabel
+            app.manuallowerlimit2DplotEditFieldLabel = uilabel(app.GridLayout2);
+            app.manuallowerlimit2DplotEditFieldLabel.HorizontalAlignment = 'right';
+            app.manuallowerlimit2DplotEditFieldLabel.Layout.Row = 3;
+            app.manuallowerlimit2DplotEditFieldLabel.Layout.Column = 1;
+            app.manuallowerlimit2DplotEditFieldLabel.Text = {'manual lower'; 'limit 2D plot'};
+
+            % Create manuallowerlimit2DplotEditField
+            app.manuallowerlimit2DplotEditField = uieditfield(app.GridLayout2, 'numeric');
+            app.manuallowerlimit2DplotEditField.Layout.Row = 3;
+            app.manuallowerlimit2DplotEditField.Layout.Column = 2;
+
+            % Create manualupperlimit2DplotEditFieldLabel
+            app.manualupperlimit2DplotEditFieldLabel = uilabel(app.GridLayout2);
+            app.manualupperlimit2DplotEditFieldLabel.HorizontalAlignment = 'right';
+            app.manualupperlimit2DplotEditFieldLabel.Layout.Row = 4;
+            app.manualupperlimit2DplotEditFieldLabel.Layout.Column = 1;
+            app.manualupperlimit2DplotEditFieldLabel.Text = {'manual upper'; 'limit 2D plot'};
+
+            % Create manualupperlimit2DplotEditField
+            app.manualupperlimit2DplotEditField = uieditfield(app.GridLayout2, 'numeric');
+            app.manualupperlimit2DplotEditField.Layout.Row = 4;
+            app.manualupperlimit2DplotEditField.Layout.Column = 2;
+
+            % Create manuallimitCheckBox
+            app.manuallimitCheckBox = uicheckbox(app.GridLayout2);
+            app.manuallimitCheckBox.ValueChangedFcn = createCallbackFcn(app, @manuallimitCheckBoxValueChanged, true);
+            app.manuallimitCheckBox.Text = {'manual'; 'limit'};
+            app.manuallimitCheckBox.Layout.Row = 5;
+            app.manuallimitCheckBox.Layout.Column = 1;
+
+            % Create TraceviewPanel
+            app.TraceviewPanel = uipanel(app.UIFigure);
+            app.TraceviewPanel.AutoResizeChildren = 'off';
+            app.TraceviewPanel.Title = 'Trace view';
+            app.TraceviewPanel.BackgroundColor = [0.8118 1 1];
+            app.TraceviewPanel.Position = [432 6 804 276];
+
+            % Create UIAxes2
+            app.UIAxes2 = uiaxes(app.TraceviewPanel);
+            xlabel(app.UIAxes2, 'time [s]')
+            ylabel(app.UIAxes2, 'voltage [V]')
+            zlabel(app.UIAxes2, 'Z')
+            app.UIAxes2.XGrid = 'on';
+            app.UIAxes2.YGrid = 'on';
+            app.UIAxes2.TickDir = 'out';
+            app.UIAxes2.Position = [201 11 592 238];
+
+            % Create MeasureButton
+            app.MeasureButton = uibutton(app.TraceviewPanel, 'push');
+            app.MeasureButton.ButtonPushedFcn = createCallbackFcn(app, @MeasureButtonPushed, true);
+            app.MeasureButton.BackgroundColor = [0.651 0.8941 1];
+            app.MeasureButton.FontSize = 16;
+            app.MeasureButton.FontWeight = 'bold';
+            app.MeasureButton.Position = [17 99 111 47];
+            app.MeasureButton.Text = 'Measure';
+
+            % Create fromEditFieldLabel
+            app.fromEditFieldLabel = uilabel(app.TraceviewPanel);
+            app.fromEditFieldLabel.Position = [17 159 32 22];
+            app.fromEditFieldLabel.Text = 'from';
+
+            % Create fromPlot
+            app.fromPlot = uieditfield(app.TraceviewPanel, 'numeric');
+            app.fromPlot.ValueChangedFcn = createCallbackFcn(app, @fromPlotValueChanged, true);
+            app.fromPlot.Position = [54 159 45 22];
+            app.fromPlot.Value = 10;
+
+            % Create toEditFieldLabel
+            app.toEditFieldLabel = uilabel(app.TraceviewPanel);
+            app.toEditFieldLabel.HorizontalAlignment = 'right';
+            app.toEditFieldLabel.Position = [103 159 14 22];
+            app.toEditFieldLabel.Text = 'to';
+
+            % Create toPlot
+            app.toPlot = uieditfield(app.TraceviewPanel, 'numeric');
+            app.toPlot.ValueChangedFcn = createCallbackFcn(app, @toPlotValueChanged, true);
+            app.toPlot.Position = [122 159 44 22];
+            app.toPlot.Value = 900;
+
+            % Create TDLabel
+            app.TDLabel = uilabel(app.TraceviewPanel);
+            app.TDLabel.Position = [168 159 25 22];
+            app.TDLabel.Text = '[us]';
+
+            % Create peaktopeakvoltageLabel
+            app.peaktopeakvoltageLabel = uilabel(app.TraceviewPanel);
+            app.peaktopeakvoltageLabel.Position = [17 186 86 28];
+            app.peaktopeakvoltageLabel.Text = {'peak-to-peak'; 'intensity '; ''};
+
+            % Create peaktopeakIntensity
+            app.peaktopeakIntensity = uieditfield(app.TraceviewPanel, 'numeric');
+            app.peaktopeakIntensity.ValueChangedFcn = createCallbackFcn(app, @peaktopeakIntensityValueChanged, true);
+            app.peaktopeakIntensity.Position = [115 189 51 22];
+
+            % Create VPLabel
+            app.VPLabel = uilabel(app.TraceviewPanel);
+            app.VPLabel.Position = [168 189 34 22];
+            app.VPLabel.Text = '[mV]';
+
+            % Create hydrophonesensitivityLabel
+            app.hydrophonesensitivityLabel = uilabel(app.TraceviewPanel);
+            app.hydrophonesensitivityLabel.Position = [17 219 72 28];
+            app.hydrophonesensitivityLabel.Text = {'hydrophone '; 'sensitivity'};
+
+            % Create hydrophonesensitivityEditField
+            app.hydrophonesensitivityEditField = uieditfield(app.TraceviewPanel, 'numeric');
+            app.hydrophonesensitivityEditField.ValueChangedFcn = createCallbackFcn(app, @hydrophonesensitivityEditFieldValueChanged, true);
+            app.hydrophonesensitivityEditField.Position = [87 222 78 22];
+
+            % Create VPaLabel
+            app.VPaLabel = uilabel(app.TraceviewPanel);
+            app.VPaLabel.Position = [167 222 38 22];
+            app.VPaLabel.Text = '[V/Pa]';
+
+            % Create SaveButton
+            app.SaveButton = uibutton(app.TraceviewPanel, 'push');
+            app.SaveButton.ButtonPushedFcn = createCallbackFcn(app, @SaveButtonPushed, true);
+            app.SaveButton.BackgroundColor = [0.651 0.8941 1];
+            app.SaveButton.FontSize = 16;
+            app.SaveButton.FontWeight = 'bold';
+            app.SaveButton.Position = [48 14 111 31];
+            app.SaveButton.Text = 'Save';
+
+            % Create studyfolderEditFieldLabel_2
+            app.studyfolderEditFieldLabel_2 = uilabel(app.TraceviewPanel);
+            app.studyfolderEditFieldLabel_2.Position = [16 70 84 22];
+            app.studyfolderEditFieldLabel_2.Text = 'Trace filename';
+
+            % Create measureFileNameEntry
+            app.measureFileNameEntry = uieditfield(app.TraceviewPanel, 'text');
+            app.measureFileNameEntry.Position = [16 49 176 22];
+
+            % Create VPButton
+            app.VPButton = uibutton(app.TraceviewPanel, 'push');
+            app.VPButton.ButtonPushedFcn = createCallbackFcn(app, @VPButtonPushed, true);
+            app.VPButton.BackgroundColor = [0.651 0.8941 1];
+            app.VPButton.FontSize = 14;
+            app.VPButton.FontWeight = 'bold';
+            app.VPButton.Position = [131 124 56 22];
+            app.VPButton.Text = 'V<>P';
+
+            % Create TDButton
+            app.TDButton = uibutton(app.TraceviewPanel, 'push');
+            app.TDButton.ButtonPushedFcn = createCallbackFcn(app, @TDButtonPushed, true);
+            app.TDButton.BackgroundColor = [0.651 0.8941 1];
+            app.TDButton.FontSize = 14;
+            app.TDButton.FontWeight = 'bold';
+            app.TDButton.Position = [131 99 56 22];
+            app.TDButton.Text = 'T<>D';
+
+            % Create ParameterspacePanel
+            app.ParameterspacePanel = uipanel(app.UIFigure);
+            app.ParameterspacePanel.Tooltip = {'max 3 parameters specified by'; '<parameter letter>(<start>:[<step>:]<end>)'; ''; 'e.g.:'; '"x(0:0.1:1)"'; 'or'; '"x(0:0.1:1) f(1:1:10)"'; 'or'; '"y(1:10) z(1:10) v(2:2:10)"'; ''; 'spatial parameters must always preceed non-spatial ones'};
+            app.ParameterspacePanel.Title = 'Parameter space';
+            app.ParameterspacePanel.BackgroundColor = [0.9059 0.749 1];
+            app.ParameterspacePanel.Position = [218 290 270 426];
+
+            % Create ParamAxes
+            app.ParamAxes = uiaxes(app.ParameterspacePanel);
+            title(app.ParamAxes, 'Parameter space')
+            app.ParamAxes.Toolbar.Visible = 'off';
+            app.ParamAxes.XTick = [];
+            app.ParamAxes.YTick = [];
+            app.ParamAxes.Position = [3 4 262 242];
+
+            % Create ParamButton
+            app.ParamButton = uibutton(app.ParameterspacePanel, 'push');
+            app.ParamButton.ButtonPushedFcn = createCallbackFcn(app, @ParamButtonPushed, true);
+            app.ParamButton.BackgroundColor = [0.9412 0.9412 0.9412];
+            app.ParamButton.Position = [23 253 239 22];
+            app.ParamButton.Text = 'Set Parameters';
+
+            % Create InputexperimentparametersEditFieldLabel
+            app.InputexperimentparametersEditFieldLabel = uilabel(app.ParameterspacePanel);
+            app.InputexperimentparametersEditFieldLabel.Position = [23 305 159 22];
+            app.InputexperimentparametersEditFieldLabel.Text = 'Input experiment parameters';
+
+            % Create ExpStringField
+            app.ExpStringField = uieditfield(app.ParameterspacePanel, 'text');
+            app.ExpStringField.Tooltip = {''};
+            app.ExpStringField.Position = [23 278 239 28];
+
+            % Create TextArea
+            app.TextArea = uitextarea(app.ParameterspacePanel);
+            app.TextArea.BackgroundColor = [0.8902 0.6118 1];
+            app.TextArea.Position = [4 326 262 81];
+            app.TextArea.Value = {'spatial: x, y, z'; ''; 'signal: f = frequency, v = voltage, b = burst # '; ''; 'example: "x(0:0.1:1) f(8:12)"'};
+
+            % Create ExperimentsettingsPanel
+            app.ExperimentsettingsPanel = uipanel(app.UIFigure);
+            app.ExperimentsettingsPanel.Title = 'Experiment settings';
+            app.ExperimentsettingsPanel.BackgroundColor = [0.7765 0.9804 0.6078];
+            app.ExperimentsettingsPanel.Position = [498 535 199 181];
+
+            % Create ExperimentnameLabel
+            app.ExperimentnameLabel = uilabel(app.ExperimentsettingsPanel);
+            app.ExperimentnameLabel.Position = [11 80 100 22];
+            app.ExperimentnameLabel.Text = 'Experiment name';
+
+            % Create prefixEditFieldLabel
+            app.prefixEditFieldLabel = uilabel(app.ExperimentsettingsPanel);
+            app.prefixEditFieldLabel.HorizontalAlignment = 'right';
+            app.prefixEditFieldLabel.Position = [38 58 35 22];
+            app.prefixEditFieldLabel.Text = 'prefix';
+
+            % Create prefixEditField
+            app.prefixEditField = uieditfield(app.ExperimentsettingsPanel, 'text');
+            app.prefixEditField.ValueChangedFcn = createCallbackFcn(app, @prefixEditFieldValueChanged, true);
+            app.prefixEditField.Position = [88 58 100 22];
+
+            % Create tagEditFieldLabel
+            app.tagEditFieldLabel = uilabel(app.ExperimentsettingsPanel);
+            app.tagEditFieldLabel.HorizontalAlignment = 'right';
+            app.tagEditFieldLabel.Position = [48 37 25 22];
+            app.tagEditFieldLabel.Text = 'tag';
+
+            % Create tagEditField
+            app.tagEditField = uieditfield(app.ExperimentsettingsPanel, 'text');
+            app.tagEditField.ValueChangedFcn = createCallbackFcn(app, @tagEditFieldValueChanged, true);
+            app.tagEditField.Position = [88 37 100 22];
+
+            % Create studyfolderEditFieldLabel
+            app.studyfolderEditFieldLabel = uilabel(app.ExperimentsettingsPanel);
+            app.studyfolderEditFieldLabel.HorizontalAlignment = 'right';
+            app.studyfolderEditFieldLabel.Position = [23 105 64 22];
+            app.studyfolderEditFieldLabel.Text = 'studyfolder';
+
+            % Create studyfolderEditField
+            app.studyfolderEditField = uieditfield(app.ExperimentsettingsPanel, 'text');
+            app.studyfolderEditField.ValueChangedFcn = createCallbackFcn(app, @studyfolderEditFieldValueChanged, true);
+            app.studyfolderEditField.Position = [89 105 100 22];
+
+            % Create StudyFolderLabel
+            app.StudyFolderLabel = uieditfield(app.ExperimentsettingsPanel, 'text');
+            app.StudyFolderLabel.Editable = 'off';
+            app.StudyFolderLabel.Position = [30 132 158 22];
+
+            % Create StudyDirButton
+            app.StudyDirButton = uibutton(app.ExperimentsettingsPanel, 'push');
+            app.StudyDirButton.ButtonPushedFcn = createCallbackFcn(app, @StudyDirButtonPushed, true);
+            app.StudyDirButton.Position = [5 132 29 22];
+            app.StudyDirButton.Text = 'dir';
+
+            % Create RunButton
+            app.RunButton = uibutton(app.UIFigure, 'push');
+            app.RunButton.ButtonPushedFcn = createCallbackFcn(app, @RunButtonPushed, true);
+            app.RunButton.BackgroundColor = [0.3922 0.8314 0.0745];
+            app.RunButton.FontSize = 16;
+            app.RunButton.FontWeight = 'bold';
+            app.RunButton.Position = [499 488 86 43];
+            app.RunButton.Text = 'Run';
+
+            % Create StopButton
+            app.StopButton = uibutton(app.UIFigure, 'state');
+            app.StopButton.ValueChangedFcn = createCallbackFcn(app, @StopButtonValueChanged, true);
+            app.StopButton.Text = 'Stop';
+            app.StopButton.BackgroundColor = [0.851 0.3255 0.098];
+            app.StopButton.FontSize = 16;
+            app.StopButton.FontWeight = 'bold';
+            app.StopButton.Position = [610 488 84 42];
+
+            % Create StatusReport
+            app.StatusReport = uitextarea(app.UIFigure);
+            app.StatusReport.Editable = 'off';
+            app.StatusReport.BackgroundColor = [0.8 0.8 0.8];
+            app.StatusReport.Position = [497 391 199 88];
+
+            % Create SignalsetterPanel
+            app.SignalsetterPanel = uipanel(app.UIFigure);
+            app.SignalsetterPanel.Title = 'Signal setter';
+            app.SignalsetterPanel.BackgroundColor = [1 1 0.6];
+            app.SignalsetterPanel.Position = [221 105 201 174];
+
+            % Create frequencyEditFieldLabel
+            app.frequencyEditFieldLabel = uilabel(app.SignalsetterPanel);
+            app.frequencyEditFieldLabel.Position = [10 119 58 22];
+            app.frequencyEditFieldLabel.Text = 'frequency';
+
+            % Create frequencyEditField
+            app.frequencyEditField = uieditfield(app.SignalsetterPanel, 'numeric');
+            app.frequencyEditField.ValueChangedFcn = createCallbackFcn(app, @frequencyEditFieldValueChanged, true);
+            app.frequencyEditField.Position = [79 120 76 22];
+
+            % Create MHzLabel
+            app.MHzLabel = uilabel(app.SignalsetterPanel);
+            app.MHzLabel.Position = [157 121 37 22];
+            app.MHzLabel.Text = '[MHz]';
+
+            % Create voltageEditFieldLabel
+            app.voltageEditFieldLabel = uilabel(app.SignalsetterPanel);
+            app.voltageEditFieldLabel.Position = [10 87 44 22];
+            app.voltageEditFieldLabel.Text = 'voltage';
+
+            % Create voltageEditField
+            app.voltageEditField = uieditfield(app.SignalsetterPanel, 'numeric');
+            app.voltageEditField.ValueChangedFcn = createCallbackFcn(app, @voltageEditFieldValueChanged, true);
+            app.voltageEditField.Position = [79 88 76 22];
+
+            % Create VLabel_2
+            app.VLabel_2 = uilabel(app.SignalsetterPanel);
+            app.VLabel_2.Position = [157 89 25 22];
+            app.VLabel_2.Text = '[V]';
+
+            % Create burstnumberEditFieldLabel
+            app.burstnumberEditFieldLabel = uilabel(app.SignalsetterPanel);
+            app.burstnumberEditFieldLabel.Position = [10 52 76 22];
+            app.burstnumberEditFieldLabel.Text = 'burst number';
+
+            % Create burstnumberEditField
+            app.burstnumberEditField = uieditfield(app.SignalsetterPanel, 'numeric');
+            app.burstnumberEditField.ValueChangedFcn = createCallbackFcn(app, @burstnumberEditFieldValueChanged, true);
+            app.burstnumberEditField.Position = [97 53 57 22];
+
+            % Create OFFButton
+            app.OFFButton = uibutton(app.SignalsetterPanel, 'state');
+            app.OFFButton.ValueChangedFcn = createCallbackFcn(app, @OFFButtonValueChanged, true);
+            app.OFFButton.Text = 'OFF';
+            app.OFFButton.Position = [120 7 62 31];
+
+            % Create SetsignalButton
+            app.SetsignalButton = uibutton(app.SignalsetterPanel, 'push');
+            app.SetsignalButton.ButtonPushedFcn = createCallbackFcn(app, @SetsignalButtonPushed, true);
+            app.SetsignalButton.BackgroundColor = [1 1 0.0667];
+            app.SetsignalButton.FontSize = 16;
+            app.SetsignalButton.FontWeight = 'bold';
+            app.SetsignalButton.Position = [21 7 111 31];
+            app.SetsignalButton.Text = 'Set signal';
+
+            % Create PlotviewPanel
+            app.PlotviewPanel = uipanel(app.UIFigure);
+            app.PlotviewPanel.Title = 'Plot view';
+            app.PlotviewPanel.BackgroundColor = [1 0.7216 0.7216];
+            app.PlotviewPanel.Position = [705 290 531 426];
+
+            % Create FigAxis
+            app.FigAxis = uiaxes(app.PlotviewPanel);
+            xlabel(app.FigAxis, 'X')
+            ylabel(app.FigAxis, 'Y')
+            zlabel(app.FigAxis, 'Z')
+            app.FigAxis.Position = [15 5 472 329];
+
+            % Create ReplotButton
+            app.ReplotButton = uibutton(app.PlotviewPanel, 'push');
+            app.ReplotButton.ButtonPushedFcn = createCallbackFcn(app, @ReplotButtonPushed, true);
+            app.ReplotButton.Tooltip = {'Uses the study name selected to place it in the corresponding folder. File is tagged with "_REPLOT". The settings of the replot can be chosen in the plot settings menu.'};
+            app.ReplotButton.Position = [337 360 182 22];
+            app.ReplotButton.Text = 'Replot';
+
+            % Create ReduceFunctionDropDown
+            app.ReduceFunctionDropDown = uidropdown(app.PlotviewPanel);
+            app.ReduceFunctionDropDown.Items = {'select', 'mean', 'median', 'max', 'min', 'std', 'var'};
+            app.ReduceFunctionDropDown.ValueChangedFcn = createCallbackFcn(app, @ReduceFunctionDropDownValueChanged, true);
+            app.ReduceFunctionDropDown.Position = [130 358 69 22];
+            app.ReduceFunctionDropDown.Value = 'mean';
+
+            % Create ReducedimensionDropDownLabel
+            app.ReducedimensionDropDownLabel = uilabel(app.PlotviewPanel);
+            app.ReducedimensionDropDownLabel.HorizontalAlignment = 'right';
+            app.ReducedimensionDropDownLabel.Position = [34 381 105 22];
+            app.ReducedimensionDropDownLabel.Text = 'Reduce dimension';
+
+            % Create ReducedimensionDropDown
+            app.ReducedimensionDropDown = uidropdown(app.PlotviewPanel);
+            app.ReducedimensionDropDown.Items = {'no', '1', '2', '3'};
+            app.ReducedimensionDropDown.ValueChangedFcn = createCallbackFcn(app, @ReducedimensionDropDownValueChanged, true);
+            app.ReducedimensionDropDown.Position = [151 381 48 22];
+            app.ReducedimensionDropDown.Value = 'no';
+
+            % Create normaliseDropDownLabel
+            app.normaliseDropDownLabel = uilabel(app.PlotviewPanel);
+            app.normaliseDropDownLabel.HorizontalAlignment = 'right';
+            app.normaliseDropDownLabel.Position = [215 381 58 22];
+            app.normaliseDropDownLabel.Text = 'normalise';
+
+            % Create normaliseDropDown
+            app.normaliseDropDown = uidropdown(app.PlotviewPanel);
+            app.normaliseDropDown.Items = {'no', 'all', '1', '2', '3'};
+            app.normaliseDropDown.ValueChangedFcn = createCallbackFcn(app, @normaliseDropDownValueChanged, true);
+            app.normaliseDropDown.BackgroundColor = [0.9608 0.9608 0.9608];
+            app.normaliseDropDown.Position = [274 381 48 22];
+            app.normaliseDropDown.Value = 'no';
+
+            % Create plotfileLabel
+            app.plotfileLabel = uieditfield(app.PlotviewPanel, 'text');
+            app.plotfileLabel.Editable = 'off';
+            app.plotfileLabel.Position = [362 381 157 22];
+
+            % Create fileButton
+            app.fileButton = uibutton(app.PlotviewPanel, 'push');
+            app.fileButton.ButtonPushedFcn = createCallbackFcn(app, @fileButtonPushed, true);
+            app.fileButton.Position = [337 381 31 22];
+            app.fileButton.Text = 'file';
+
+            % Create ReduceSelectDropDown
+            app.ReduceSelectDropDown = uidropdown(app.PlotviewPanel);
+            app.ReduceSelectDropDown.Items = {};
+            app.ReduceSelectDropDown.ValueChangedFcn = createCallbackFcn(app, @ReduceSelectDropDownValueChanged, true);
+            app.ReduceSelectDropDown.Visible = 'off';
+            app.ReduceSelectDropDown.Position = [52 358 69 22];
+            app.ReduceSelectDropDown.Value = {};
+
+            % Create RunscriptButton
+            app.RunscriptButton = uibutton(app.UIFigure, 'push');
+            app.RunscriptButton.ButtonPushedFcn = createCallbackFcn(app, @RunscriptButtonPushed, true);
+            app.RunscriptButton.BackgroundColor = [0.651 0.651 0.651];
+            app.RunscriptButton.FontSize = 16;
+            app.RunscriptButton.FontWeight = 'bold';
+            app.RunscriptButton.Position = [259 20 107 31];
+            app.RunscriptButton.Text = 'Run script';
+
+            % Create InputexperimentparametersEditFieldLabel_2
+            app.InputexperimentparametersEditFieldLabel_2 = uilabel(app.UIFigure);
+            app.InputexperimentparametersEditFieldLabel_2.Position = [222 76 131 22];
+            app.InputexperimentparametersEditFieldLabel_2.Text = 'Script matlab call';
+
+            % Create matlabInput
+            app.matlabInput = uieditfield(app.UIFigure, 'text');
+            app.matlabInput.Tooltip = {''};
+            app.matlabInput.Position = [222 53 178 26];
+
+            % Show the figure after all components are created
+            app.UIFigure.Visible = 'on';
+        end
+    end
+
+    % App creation and deletion
+    methods (Access = public)
+
+        % Construct app
+        function app = EVA
+
+            % Create UIFigure and components
+            createComponents(app)
+
+            % Register the app with App Designer
+            registerApp(app, app.UIFigure)
+
+            % Execute the startup function
+            runStartupFcn(app, @startupFcn)
+
+            if nargout == 0
+                clear app
+            end
+        end
+
+        % Code that executes before app deletion
+        function delete(app)
+
+            % Delete UIFigure when app is deleted
+            delete(app.UIFigure)
+        end
+    end
+end

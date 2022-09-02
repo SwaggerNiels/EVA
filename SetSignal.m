@@ -24,7 +24,7 @@ function SetSignal(GenObj, param, freq, burstN, volt)
                 num2str(volt)
                 dg([':SOUR1:VOLT ' num2str(volt)]);
 
-                dg([':SOUR2:VOLT ',num2str(5)]);
+                dg([':SOUR2:VOLT ',num2str(10)]);
         end
 
         dg(':SOUR1:BURS:INT:PER 1E-3');

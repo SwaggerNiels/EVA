@@ -12,8 +12,10 @@ function InitGenerator(GenObj)
     
         dg(':SOUR1:PHAS:INIT');
         dg(':SOUR2:PHAS:SYNC');
-        dg(':SOUR1:APPLY:SQU');
-        dg(':SOUR2:APPLY:SQU');
+%         dg(':SOUR1:APPLY:SQU');
+        dg(':SOUR1:APPLY:SIN');
+%         dg(':SOUR2:APPLY:SQU');
+        dg(':SOUR2:APPLY:SIN');
 
         dg(':SOUR1:VOLT:UNIT VPP');
     

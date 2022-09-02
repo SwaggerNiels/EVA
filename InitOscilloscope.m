@@ -9,7 +9,8 @@ function InitOscilloscope(ScopeObj, range, delay, vrange)
     %trigger settings%
     OsciStruct.trigger_mode='edge';
     OsciStruct.trigger_source='channel2';
-    OsciStruct.trigger_level='-2.0';
+%     OsciStruct.trigger_level='-2.0'; %original
+    OsciStruct.trigger_level='2.0';
     OsciStruct.trigger_slope='positive';
     %acquisition settings%
     OsciStruct.acquire_type='average'; %average% %normal%
@@ -24,7 +25,7 @@ function InitOscilloscope(ScopeObj, range, delay, vrange)
     OsciStruct.ch1_range=num2str(vrange);%something like 1400E-3
     OsciStruct.ch1_offset='0';
     OsciStruct.ch1_coupling='DC';
-    OsciStruct.ch1_impedance='fifty'; %ONEMeg%
+    OsciStruct.ch1_impedance='onemeg'; %ONEMeg%
     %channel2 settings%
     OsciStruct.ch2_display='0';
     OsciStruct.ch2_probe='1';
